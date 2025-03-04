@@ -1,4 +1,4 @@
 node_modules/
 .env
-chart.drawio
-templete.drawio
+chart.drawio/
+templete.drawio/
