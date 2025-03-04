@@ -31,7 +31,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl:"mongodb+srv://ruyanga:ruyangam15@merci.swtvs.mongodb.net/LIBRARY"
+        mongoUrl:process.env.MONGO_DB
     }),
     cookie: { 
         secure: true,
