@@ -36,7 +36,7 @@ app.use(session({
     }),
     cookie: { 
         secure: true,
-        httpOnly: true,
+        httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 hour session
         sameSite: 'lax'        
         } 
