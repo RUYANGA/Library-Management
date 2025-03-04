@@ -145,6 +145,7 @@ try {
         username:user.username,
         books:user.books
     }
+    console.log(req.session.user)
 
   
     res.status(200).json({message:'Login successfuly'})

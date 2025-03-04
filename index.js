@@ -35,16 +35,16 @@ app.use(session({
         mongoUrl:process.env.MONGO_DB
     }),
     cookie: { 
-        secure:process.env.NODE_ENV === 'production',
-        httpOnly: false,
+        secure:true,
+        httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 hour session
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+        sameSite:'none'
     } 
 }));
 
 app.use(
   cors({
-    origin: "*", // Allow requests from any origin
+    origin: "http://localhost:3000", // Allow requests from any origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all HTTP methods
     allowedHeaders: "Content-Type, Authorization", // Allow specific headers
     credentials: true, // Allow cookies/sessions if needed
