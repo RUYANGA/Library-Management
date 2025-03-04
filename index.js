@@ -6,6 +6,7 @@ const authRoutes=require('./routes/auth');
 const borrowBook=require('./routes/books')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const cors=require('cors')
 
 
 
@@ -40,6 +41,15 @@ app.use(session({
         sameSite: 'lax'        
         } 
 }));
+
+app.use(
+  cors({
+    origin: "*", // Allow requests from any origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all HTTP methods
+    allowedHeaders: "Content-Type, Authorization", // Allow specific headers
+    credentials: true, // Allow cookies/sessions if needed
+  })
+);
 
 
 //routes
