@@ -44,7 +44,7 @@ app.use(session({
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Allow requests from any origin
+    origin: "*", // Allow requests from any origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all HTTP methods
     allowedHeaders: "Content-Type, Authorization", // Allow specific headers
     credentials: true, // Allow cookies/sessions if needed

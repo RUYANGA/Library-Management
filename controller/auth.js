@@ -147,6 +147,8 @@ try {
     }
     console.log(req.session.user)
 
+    res.cook
+
   
     res.status(200).json({message:'Login successfuly'})
 } catch (error) {
