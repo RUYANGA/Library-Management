@@ -28,7 +28,15 @@ app.use(session({
     secret:'supersecretkey', // Change this in production
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 } // 1 hour session
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production',  
+        secure: true,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 1 hour session
+        sameSite: 'lax',
+          
+        
+        } 
 }));
 
 
