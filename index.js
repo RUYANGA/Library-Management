@@ -35,11 +35,11 @@ app.use(session({
         mongoUrl:process.env.MONGO_DB
     }),
     cookie: { 
-        secure: true,
+        secure:process.env.NODE_ENV === 'production',
         httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 hour session
-        sameSite: 'lax'        
-        } 
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    } 
 }));
 
 app.use(
