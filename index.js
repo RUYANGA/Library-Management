@@ -30,12 +30,12 @@ app.use(session({
     secret:'supersecretkey', // Change this in production
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_DB
+    }),
     cookie: { 
         secure: true,
         httpOnly: true,
-        store: MongoStore.create({
-        mongoUrl: process.env.MONGO_DB
-    }),
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 hour session
         sameSite: 'lax'        
         } 
