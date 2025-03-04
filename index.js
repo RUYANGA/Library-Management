@@ -5,6 +5,8 @@ const mongoose=require('mongoose');
 const authRoutes=require('./routes/auth');
 const borrowBook=require('./routes/books')
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 
 
 const app=express();
@@ -31,6 +33,9 @@ app.use(session({
     cookie: { 
         secure: true,
         httpOnly: true,
+        store: MongoStore.create({
+        mongoUrl: process.env.MONGO_DB
+    }),
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 hour session
         sameSite: 'lax'        
         } 
