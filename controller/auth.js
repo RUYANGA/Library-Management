@@ -143,14 +143,11 @@ try {
         email:user.email,
         isAdmin:user.isAdmin,
         username:user.username,
-        books:user.books
+        books:user.booksBorrowed
     }
-    console.log(req.session.user)
-
-    res.cook
-
-  
+    console.log(req.session.user) 
     res.status(200).json({message:'Login successfuly'})
+
 } catch (error) {
     res.status(500).json({message:'Error to login'})
     console.log('Error to login',error)
@@ -176,10 +173,8 @@ const lognout=async(req,res)=>{
 const dashboard=async(req,res)=>{
 
     try {
-        const user =await User.findById(req.session.user.id).populate('booksBorrowed')
-        // if(!req.session.user) return res.status(400).json({message:'Login first'})
-        // res.status(200).json({message:`Hello ${user.username} welcome to our app book brorrowed ${user.books}`})
 
+        const user =await User.findById(req.session.user.id).populate('booksBorrowed')
         res.status(200).json({User:user})
     } catch (error) {
         console.log('Error to access dashboard',error)
@@ -191,6 +186,7 @@ const dashboard=async(req,res)=>{
 
 const updateUser=async(req,res)=>{
    try {
+    
         const{username,email,password,phone}=req.body
         const id=req.params.id
         if(!id)return res.status(400).json({message:'User id required'});
@@ -204,6 +200,7 @@ const updateUser=async(req,res)=>{
         console.log('Error',error)
         } 
         res.status(200).json({User:userSave})
+
    } catch (error) {
         return res.status(500).json({message:'Error to update user'});
         console.log('Error to update user',error)
