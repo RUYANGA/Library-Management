@@ -39,13 +39,13 @@ app.use(session({
         secure: true,             // Render is https, so we need this
         httpOnly: true,            // Protect against XSS
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-        sameSite: ''           // Required for cross-origin with localhost frontend
+        sameSite: 'none'           // Required for cross-origin with localhost frontend
     }
 }));
 
 // CORS Configuration (Allow local frontend to talk to Render backend)
 app.use(cors({
-    origin: process.env.FRONTEND_URL,   // Local frontend
+    origin: 'https://library-7yff.onrender.com/',   // Local frontend
     credentials: true,                  // Allow cookies (session)
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type, Authorization"
