@@ -36,8 +36,8 @@ app.use(session({
         mongoUrl: process.env.MONGO_DB
     }),
     cookie: {
-        secure: true,             // Render is https, so we need this
-        httpOnly: true,            // Protect against XSS
+        secure: false,             // Render is https, so we need this
+        httpOnly: false,            // Protect against XSS
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         sameSite: 'none'           // Required for cross-origin with localhost frontend
     }
@@ -45,7 +45,7 @@ app.use(session({
 
 // CORS Configuration (Allow local frontend to talk to Render backend)
 app.use(cors({
-    origin: 'https://library-7yff.onrender.com/ogin',   // Local frontend
+    origin: 'https://library-7yff.onrender.com',   // Local frontend
     credentials: true,                  // Allow cookies (session)
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type, Authorization"
