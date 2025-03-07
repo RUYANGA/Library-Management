@@ -45,11 +45,7 @@ app.use(session({
 
 // CORS Configuration (Allow local frontend to talk to Render backend)
 app.use(cors({
-<<<<<<< HEAD
     origin: 'https://library-7yff.onrender.com/ogin',   // Local frontend
-=======
-    origin: 'https://library-7yff.onrender.com',   // Local frontend
->>>>>>> e871dc55984ef1a8b65a6d8e741974f51a8ee818
     credentials: true,                  // Allow cookies (session)
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type, Authorization"
