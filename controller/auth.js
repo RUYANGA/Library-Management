@@ -30,19 +30,7 @@ const Register=async(req,res)=>{
     const generateOpt=crypto.randomInt(100000,999999).toString()
     const otpExpired=new Date(Date.now()+ 60*60*1000)
 
-    const hashPassword=await bcrypt.hash(password,10);
-
-    const saveUser=await User.create({
-        username,
-        email,
-        password:hashPassword,
-        image,
-        otp:generateOpt,
-        otpExpired,
-        phone
-    });
-
-    await transiporter.sendMail({
+       await transiporter.sendMail({
         from:process.env.EMAIL,
         to:email,
         subject:'OTP VERIFICATION CODE',
@@ -58,6 +46,20 @@ const Register=async(req,res)=>{
     })
     .then((message)=>console.log('message',message))
     .catch((err)=>console.log('error',err))
+
+    const hashPassword=await bcrypt.hash(password,10);
+
+    const saveUser=await User.create({
+        username,
+        email,
+        password:hashPassword,
+        image,
+        otp:generateOpt,
+        otpExpired,
+        phone
+    });
+
+ 
 
 
     res.status(201).json({message:`User registered. Please verify your OTP sent to ${email} and ${phone}.`})
