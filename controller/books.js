@@ -1,6 +1,7 @@
 const User=require('../modeles/user');
 const Books=require('../modeles/books');
 const twilio=require('twilio');
+const { addWeeks}=require('date-fns')
 
 
 
@@ -17,6 +18,8 @@ const borrowBooks=async(req,res)=>{
         if(!user)return res.status(404).json({message:'Librarian not found'});
 
         if(!(studentName && classLevel  && parentPhone &&bookTitle && bookCode ))return res.status(400).json({message:'All fields are required'});
+        const currentDate=new Date()
+        const expiredDate= addWeeks(currentDate,1)
 
         const borrowed=await Books.create({
             studentName,
@@ -26,15 +29,21 @@ const borrowBooks=async(req,res)=>{
             bookTitle,
             userId,
             bookCode,
-            datetoReturn
+            datetoReturn:expiredDate
         });
         const client= twilio(process.env.TWILIO_SID,process.env.TWILIO_TOKEN);
+      
+        console.log(expiredDate)
+        console.log(currentDate)
 
         client.messages.create({
-            body:`Student borrowing a book: ${borrowed.bookTitle} student name is: ${borrowed.studentName} class studies is : ${borrowed.classLevel} time taken is :${borrowed.dateTaken}`,
+            body:`Student borrowing a book: ${borrowed.bookTitle} student name is: ${borrowed.studentName} class studies is : ${borrowed.classLevel} time taken is :${borrowed.dateTaken}  time to return is :${expiredDate}`,
             from:process.env.TWILIO_PHONE,
-            to:'+250780905910'
+            to:'+250783687408'
         });
+        // if(currentDate === expiredDate)return client.messages.create({
+        //     body:'Hell'
+        // })
 
 
         const updateUser=await User.findByIdAndUpdate({_id:userId},{$push:{booksBorrowed:borrowed}},{new:true});
@@ -74,6 +83,34 @@ const updateBooks=async(req,res)=>{
    }
 
     
-}
+};
 
-module.exports={ borrowBooks,updateBooks }
+const deleteBookBorrowed = async (req, res) => {
+    const bookId = req.params.id;
+    if (!bookId) return res.status(400).json({ message: "Book ID required" });
+
+    try {
+        // Delete the book from the Books collection
+        const deleteBook = await Books.findByIdAndDelete(bookId);
+        if (!deleteBook) return res.status(404).json({ message: "Book not found" });
+
+        // Remove the book from the user's booksBorrowed array
+        const user = await User.findByIdAndUpdate(
+            req.session.user.id,
+            { $pull: { booksBorrowed: { _id: bookId } } }, // Pull the book by its _id
+            { new: true } // Return the updated user document
+        );
+
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // Return updated user data
+        return res.status(200).json({ message: "Book deleted and user updated successfully"});
+    } catch (error) {
+        // Log the error for debugging
+        console.error("Error:", error);
+        return res.status(500).json({ message: "Error deleting book", error: error.message });
+    }
+};
+
+
+module.exports={ borrowBooks,updateBooks ,deleteBookBorrowed}

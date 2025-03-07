@@ -6,7 +6,7 @@ const unauthrized=async(req,res,next)=>{
 }
 
 const Admin = (req, res, next) => {
-    if ( !req.session.user || !req.session.user.isAdmin) {
+    if (!req.session.user.isAdmin) {
         return res.status(403).json({ message: "Access denied. You are not an admin." });
     }
     next();

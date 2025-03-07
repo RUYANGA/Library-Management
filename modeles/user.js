@@ -22,7 +22,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    booksBorrowed:[],
+    booksBorrowed:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Book'
+    }],
     image:{
         type:String
     },

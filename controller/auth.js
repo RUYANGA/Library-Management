@@ -133,6 +133,7 @@ try {
 
     const user=await User.findOne({email:email});
     if(!user)return res.status(400).json({message:"Wrong creadetials"});
+    
 
     if(!user.isVerified)return res.status(400).json({message:'Email is not verified. Please verify your OTP'})
 
@@ -174,8 +175,9 @@ const dashboard=async(req,res)=>{
 
     try {
 
-        const user =await User.findById(req.session.user.id).populate('booksBorrowed')
+        const user =await User.findById(req.session.user.id).populate("booksBorrowed")
         res.status(200).json({User:user})
+        console.log(user.booksBorrowed)
     } catch (error) {
         console.log('Error to access dashboard',error)
         return res.status(500).json({message:"Error to access dashboard"});
@@ -188,7 +190,7 @@ const updateUser=async(req,res)=>{
    try {
     
         const{username,email,password,phone}=req.body
-        const id=req.params.id
+        const id=req.session.user.id
         if(!id)return res.status(400).json({message:'User id required'});
         const user=await User.findById({_id:id})
         if(!user)return res.status(404).json({message:'User not found'});
@@ -205,5 +207,15 @@ const updateUser=async(req,res)=>{
         return res.status(500).json({message:'Error to update user'});
         console.log('Error to update user',error)
    }
+};
+
+const deleteAccount=async(req,res)=>{
+    try {
+        await User.findByIdAndDelete({_id:req.session.user.id})
+        res.clearCookie('connect.sid');
+        res.status(200).json({message:"Account deleted successfully"})
+    } catch (error) {
+        return res.status(500).json({message:'Error to delete account'})
+    }
 }
-module.exports={Register,verifyOtp,resendOtp,login,lognout,dashboard,updateUser}
+module.exports={Register,verifyOtp,resendOtp,login,lognout,dashboard,updateUser,deleteAccount}
