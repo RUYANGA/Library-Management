@@ -1,4 +1,4 @@
-const { borrowBooks, updateBooks, deleteBookBorrowed, showNotification }=require('../controller/books');
+const { borrowBooks, updateBooks, deleteBookBorrowed, showNotification }=require('../controller/borrowBook');
 const { unauthrized, Admin } = require('../middleware/authMiddleware');
 
 const router=require('express').Router();
