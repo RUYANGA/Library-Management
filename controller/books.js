@@ -1,5 +1,6 @@
 const User=require('../modeles/user');
 const Books=require('../modeles/books');
+const Notfication=require('../modeles/notifications')
 const twilio=require('twilio');
 const { addWeeks}=require('date-fns')
 
@@ -36,11 +37,19 @@ const borrowBooks=async(req,res)=>{
         console.log(expiredDate)
         console.log(currentDate)
 
-        client.messages.create({
-            body:`Student borrowing a book: ${borrowed.bookTitle} student name is: ${borrowed.studentName} class studies is : ${borrowed.classLevel} time taken is :${borrowed.dateTaken}  time to return is :${expiredDate}`,
+       const notifications= client.messages.create({
+            body:`Student borrowing a book: ${borrowed.bookTitle}, student name is: ${borrowed.studentName} ,class studies is : ${borrowed.classLevel}, time taken is :${borrowed.dateTaken} , time to return is :${expiredDate}`,
             from:process.env.TWILIO_PHONE,
-            to:'+250783687408'
+            to:'+250780905910'
         });
+
+
+        await Notfication.create({
+            Message:`Student borrowing a book: ${borrowed.bookTitle} student name is: ${borrowed.studentName} class studies is : ${borrowed.classLevel} time taken is :${borrowed.dateTaken}  time to return is :${expiredDate}`,
+            Librarian:`+250780905910`
+        })
+
+
         // if(currentDate === expiredDate)return client.messages.create({
         //     body:'Hell'
         // })
@@ -57,6 +66,15 @@ const borrowBooks=async(req,res)=>{
     
    }
 
+}
+
+const showNotification=async(req,res)=>{
+    try {
+        const notifications=await Notfication.find();
+        res.status(200).json({Notification:notifications})
+    } catch (error) {
+        return res.status(500).json({message:'Error to show notifications'})
+    }
 }
 
 const updateBooks=async(req,res)=>{
@@ -97,9 +115,9 @@ const deleteBookBorrowed = async (req, res) => {
         // Remove the book from the user's booksBorrowed array
         const user = await User.findByIdAndUpdate(
             req.session.user.id,
-            { $pull: { booksBorrowed: { _id: bookId } } }, // Pull the book by its _id
-            { new: true } // Return the updated user document
-        );
+            { $pull: { booksBorrowed: { _id: bookId } } },
+            { new: true }
+        ); // Return the updated user document
 
         if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -113,4 +131,4 @@ const deleteBookBorrowed = async (req, res) => {
 };
 
 
-module.exports={ borrowBooks,updateBooks ,deleteBookBorrowed}
+module.exports={ borrowBooks,updateBooks ,deleteBookBorrowed ,showNotification}

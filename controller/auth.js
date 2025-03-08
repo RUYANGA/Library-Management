@@ -176,13 +176,25 @@ const lognout=async(req,res)=>{
 const dashboard=async(req,res)=>{
 
     try {
+        const user=await User.find().select('username email booksBorrowed phone datetoReturn bookCode').populate('booksBorrowed');
 
-        const user =await User.findById(req.session.user.id).populate("booksBorrowed")
-        res.status(200).json({User:user})
-        console.log(user.booksBorrowed)
+        const returnUser=user.map(user=>({
+            Name:user.username,
+            Email:user.email,
+            Phone:user.phone,
+            booksBorrowed:user.booksBorrowed.map(book=>({
+                BookId:book._id,
+                BookCode:book.bookCode,
+                BookName:book.bookTitle,
+                Studente:book.studentName,
+                parentPhone:book.parentPhone,
+                DateTaken:book.dateTaken,
+                DatetoReturn:book.datetoReturn
+            }))
+        }))
+
+        res.status(200).json({returnUser})
     } catch (error) {
-        console.log('Error to access dashboard',error)
-        return res.status(500).json({message:"Error to access dashboard"});
         
     }
    
