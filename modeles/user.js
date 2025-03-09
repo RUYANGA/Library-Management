@@ -24,7 +24,7 @@ const userSchema=new mongoose.Schema({
     },
     booksBorrowed:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Book'
+        ref:'borrowBook'
     }],
     image:{
         type:String

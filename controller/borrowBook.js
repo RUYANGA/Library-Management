@@ -1,6 +1,6 @@
 const User=require('../modeles/user');
 const Books=require('../modeles/borrowBook');
-const Notfication=require('../modeles/notifications')
+const Notification=require('../modeles/notifications')
 const twilio=require('twilio');
 const { addWeeks}=require('date-fns')
 
@@ -32,22 +32,23 @@ const borrowBooks=async(req,res)=>{
             bookCode,
             datetoReturn:expiredDate
         });
+
+        await Notification.create({
+            Message:`Student borrowing a book: ${borrowed.bookTitle} student name is: ${borrowed.studentName} class studies is : ${borrowed.classLevel} time taken is :${borrowed.dateTaken}  time to return is :${expiredDate}`,
+            Librarian:`+250780905910`
+        })
+        
         const client= twilio(process.env.TWILIO_SID,process.env.TWILIO_TOKEN);
       
-        console.log(expiredDate)
-        console.log(currentDate)
 
-       const notifications= client.messages.create({
+        client.messages.create({
             body:`Student borrowing a book: ${borrowed.bookTitle}, student name is: ${borrowed.studentName} ,class studies is : ${borrowed.classLevel}, time taken is :${borrowed.dateTaken} , time to return is :${expiredDate}`,
             from:process.env.TWILIO_PHONE,
             to:'+250780905910'
         });
 
 
-        await Notfication.create({
-            Message:`Student borrowing a book: ${borrowed.bookTitle} student name is: ${borrowed.studentName} class studies is : ${borrowed.classLevel} time taken is :${borrowed.dateTaken}  time to return is :${expiredDate}`,
-            Librarian:`+250780905910`
-        })
+      
 
 
         // if(currentDate === expiredDate)return client.messages.create({
@@ -68,14 +69,6 @@ const borrowBooks=async(req,res)=>{
 
 }
 
-const showNotification=async(req,res)=>{
-    try {
-        const notifications=await Notfication.find();
-        res.status(200).json({Notification:notifications})
-    } catch (error) {
-        return res.status(500).json({message:'Error to show notifications'})
-    }
-}
 
 const updateBooks=async(req,res)=>{
    try {
@@ -131,4 +124,4 @@ const deleteBookBorrowed = async (req, res) => {
 };
 
 
-module.exports={ borrowBooks,updateBooks ,deleteBookBorrowed ,showNotification}
+module.exports={ borrowBooks,updateBooks ,deleteBookBorrowed}

@@ -176,7 +176,7 @@ const lognout=async(req,res)=>{
 const dashboard=async(req,res)=>{
 
     try {
-        const user=await User.find().select('username email booksBorrowed phone datetoReturn bookCode').populate('booksBorrowed');
+        const user=await User.find({_id:req.session.user.id}).select('username email booksBorrowed phone datetoReturn bookCode').populate('booksBorrowed');
 
         const returnUser=user.map(user=>({
             Name:user.username,
@@ -186,7 +186,7 @@ const dashboard=async(req,res)=>{
                 BookId:book._id,
                 BookCode:book.bookCode,
                 BookName:book.bookTitle,
-                Studente:book.studentName,
+                Student:book.studentName,
                 parentPhone:book.parentPhone,
                 DateTaken:book.dateTaken,
                 DatetoReturn:book.datetoReturn
@@ -208,9 +208,10 @@ const updateUser=async(req,res)=>{
         if(!id)return res.status(400).json({message:'User id required'});
         const user=await User.findById({_id:id})
         if(!user)return res.status(404).json({message:'User not found'});
+        const hashPassword=await bcrypt.hash(password,10)
         let userSave;
         try {
-            userSave=await User.findByIdAndUpdate({_id:id},{$set:{username,email,password,phone}},{new:true})
+            userSave=await User.findByIdAndUpdate({_id:id},{$set:{username,email,password:hashPassword,phone}},{new:true})
         } catch (error) {
         return res.status(500).json({message:'Error to update user '});
         console.log('Error',error)

@@ -3,7 +3,8 @@ const express = require('express');
 const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
-const borrowBook = require('./routes/books');
+const borrowBook = require('./routes/borrowBook');
+const notification=require('./routes/notification')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const cors = require('cors');
@@ -27,7 +28,7 @@ mongoose.connect(process.env.MONGO_DB)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session Configuration (for Render backend + localhost frontend)
+// Session Configuration 
 app.use(session({
     secret: 'supersecretkey', // Change this if needed
     resave: false,
@@ -39,13 +40,13 @@ app.use(session({
         secure: true,             // Render is https, so we need this
         httpOnly: true,            // Protect against XSS
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-        sameSite: 'none'           // Required for cross-origin with localhost frontend
+        sameSite: 'none' 
     }
 }));
 
-// CORS Configuration (Allow local frontend to talk to Render backend)
+// CORS Configuration 
 app.use(cors({
-    origin:process.env.FRONTEND_URL,   // Local frontend
+    origin:process.env.FRONTEND_URL,  
     credentials: true,                  // Allow cookies (session)
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type, Authorization"
@@ -54,4 +55,4 @@ app.use(cors({
 // Routes
 app.use('/api/user', authRoutes);
 app.use('/api/book', borrowBook);
-
+app.use('/api/notification',notification);
