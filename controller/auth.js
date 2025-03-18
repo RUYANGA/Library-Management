@@ -34,7 +34,7 @@ const Register=async(req,res)=>{
         from:process.env.EMAIL,
         to:email,
         subject:'OTP VERIFICATION CODE',
-        text:`Verify your email to sign up to our app\n\n ${generateOpt}`
+        html:`Verify your email to sign up to our app\n\n <h1 style="color:yellow "> ${generateOpt}</h1>`
     })
 
     const client=twilio(process.env.TWILIO_SID,process.env.TWILIO_TOKEN);
@@ -117,7 +117,7 @@ const resendOtp=async(req,res)=>{
             from:process.env.EMAIL,
             to:email,
             subject:'Otp Verification code',
-            text:`Verify your new OTP \n\n ${generateOpt}`
+            html:`Verify your email to sign up to our app\n\n <h1 style="color:yellow "> ${generateOpt}</h1>`
         })
 
         res.status(200).json({message:"OTP resent successfuly"})
@@ -219,8 +219,8 @@ const updateUser=async(req,res)=>{
         res.status(200).json({User:userSave})
 
    } catch (error) {
+        console.log('Error to update user',error);
         return res.status(500).json({message:'Error to update user'});
-        console.log('Error to update user',error)
    }
 };
 

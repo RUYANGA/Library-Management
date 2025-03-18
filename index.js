@@ -37,8 +37,8 @@ app.use(session({
         mongoUrl: process.env.MONGO_DB
     }),
     cookie: {
-        secure: true,             // Render is https, so we need this
-        httpOnly: true,            // Protect against XSS
+        secure: false,             // Render is https, so we need this
+        httpOnly: false,            // Protect against XSS
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         sameSite: 'none' 
     }
@@ -56,3 +56,8 @@ app.use(cors({
 app.use('/api/user', authRoutes);
 app.use('/api/book', borrowBook);
 app.use('/api/notification',notification);
+
+
+app.use((req,res,next)=>{
+    res.status(404).json('Page not found 404!')
+})
