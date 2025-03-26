@@ -1,8 +1,6 @@
 
 const unauthrized=async(req,res,next)=>{
-    if(!req.session.user)return res.status(400).json({message:"Unauthorized. Please log in first."});
-    
-    return next()
+    if(!req.session.user)return res.status(400).json({message:"Unauthorized. Please log in first."});;    return next()
 }
 
 const Admin = (req, res, next) => {
@@ -11,7 +9,6 @@ const Admin = (req, res, next) => {
     }
     next();
 };
-
 
 
 

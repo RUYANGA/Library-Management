@@ -7,7 +7,7 @@ const router=require('express').Router();
 
 router.post('/borrow',unauthrized, borrowBooks);
 router.post('/update/:bookId',unauthrized,Admin,updateBooks);
-router.delete('/delete/:id',unauthrized,deleteBookBorrowed);
+router.delete('/delete/:id',unauthrized,Admin,deleteBookBorrowed);
 router.get('/notification',showNotification)
 
 

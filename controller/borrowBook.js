@@ -118,8 +118,9 @@ const deleteBookBorrowed = async (req, res) => {
         return res.status(200).json({ message: "Book deleted and user updated successfully"});
     } catch (error) {
         // Log the error for debugging
-        console.error("Error:", error);
-        return res.status(500).json({ message: "Error deleting book", error: error.message });
+        const errors= new Error(error);
+        errors.statusCode=500
+        return next(errors)
     }
 };
 

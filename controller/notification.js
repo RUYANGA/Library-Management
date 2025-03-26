@@ -10,6 +10,7 @@ const showNotification=async(req,res)=>{
         console.log(error)
         return res.status(500).json({message:'Error to show notifications'})
     }
+   
 }
 
 const deletNotification=async(req,res)=>{

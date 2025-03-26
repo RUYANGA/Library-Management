@@ -35,6 +35,12 @@ const userSchema=new mongoose.Schema({
     otpExpired:{
         type:Date
     },
+    token:{
+        type:String,
+    },
+    tokenExpired:{
+        type:Date
+    },
     isVerified:{
         type:Boolean,
         default:false
